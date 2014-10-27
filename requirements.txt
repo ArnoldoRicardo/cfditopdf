@@ -1,0 +1,12 @@
+Pillow==2.6.1
+PyPDF2==1.23
+argparse==1.2.1
+html5lib==0.999
+ipdb==0.8
+ipython==2.3.0
+pystache==0.5.4
+reportlab==3.1.8
+six==1.8.0
+wsgiref==0.1.2
+xhtml2pdf==0.0.6
+xmltodict==0.9.0
