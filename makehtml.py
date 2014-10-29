@@ -1,6 +1,8 @@
-import xmltodict
+import os
+BASE_DIR = os.path.dirname(__file__)
 
 import pystache
+
 def templating(html, data):
 	response = pystache.render(html, data)
 	return response
@@ -14,9 +16,10 @@ def exploteStrings(string):
 			estring += c
 	return estring
 
+import xmltodict
 
-def extracdata():
-	doc = xmltodict.parse(open("./5DC63755-2E9D-413A-A108-24D727D0C74E.xml","r"))
+def extracdata(xml):
+	doc = xmltodict.parse(open(xml,"r"))
 	cfdi = doc["cfdi:Comprobante"]
 	#datos generales
 	fecha = cfdi["@fecha"]
@@ -67,11 +70,14 @@ def extracdata():
 
 from makepdf import convertHtmlToPdf
 
-def main():
-	data = extracdata()
-	html = templating(open("./template.html","r+").read(), data)
+def main(arg):
+	data = extracdata(arg)
+	import ipdb; ipdb.set_trace()
+	html = templating(open(BASE_DIR+"/template.html","r+").read(), data)
 	outputFilename = "test.pdf"
 	convertHtmlToPdf(html,outputFilename)
 
 if __name__ == '__main__':
-	main()
+	import sys
+	arg = sys.argv[1]
+	main(arg)
