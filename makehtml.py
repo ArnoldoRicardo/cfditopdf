@@ -5,8 +5,18 @@ def templating(html, data):
 	response = pystache.render(html, data)
 	return response
 
+def exploteStrings(string):
+	estring = u""
+	for i, c in enumerate(string):
+		if i %50 == 0:
+			estring += c+"\n"
+		else:
+			estring += c
+	return estring
+
+
 def extracdata():
-	doc = xmltodict.parse(open("./18D20955-1C03-484D-8481-FBB931927D75.xml","r"))
+	doc = xmltodict.parse(open("./5DC63755-2E9D-413A-A108-24D727D0C74E.xml","r"))
 	cfdi = doc["cfdi:Comprobante"]
 	#datos generales
 	fecha = cfdi["@fecha"]
@@ -17,13 +27,22 @@ def extracdata():
 	total = cfdi["@total"]
 	folio = cfdi["cfdi:Complemento"]["tfd:TimbreFiscalDigital"]["@UUID"]
 	#emisor
-	nombreEmisor = cfdi["cfdi:Emisor"]["@nombre"]
+	if cfdi["cfdi:Emisor"].has_key("@nombre"):
+		nombreEmisor = cfdi["cfdi:Emisor"]["@nombre"]
+	else:
+		nombreEmisor = u""
 	rfcEmisor = cfdi["cfdi:Emisor"]["@rfc"]
 	#receptor
-	nombreReceptor = cfdi["cfdi:Receptor"]["@nombre"]
+	if cfdi["cfdi:Receptor"].has_key("@nombre"):
+		nombreReceptor = cfdi["cfdi:Receptor"]["@nombre"]
+	else:
+		nombreReceptor = u""
 	rfcReceptor = cfdi["cfdi:Receptor"]["@rfc"]
-	#print "cfdi:Conceptos: " + str(cfdi["cfdi:Conceptos"])
-	#print "cfdi:Impuestos: " + str(cfdi["cfdi:Impuestos"])
+	#pie
+	sello = exploteStrings(cfdi["cfdi:Complemento"]["tfd:TimbreFiscalDigital"]["@selloCFD"])
+	certificado = exploteStrings(cfdi["cfdi:Complemento"]["tfd:TimbreFiscalDigital"]["@selloSAT"])
+	noSAT = cfdi["cfdi:Complemento"]["tfd:TimbreFiscalDigital"]["@noCertificadoSAT"]
+	FechaTimbrado = cfdi["cfdi:Complemento"]["tfd:TimbreFiscalDigital"]["@FechaTimbrado"]
 
 	return {
 		"fecha": fecha,
@@ -38,7 +57,11 @@ def extracdata():
 		"nombreReceptor": nombreReceptor,
 		"rfcReceptor": rfcReceptor,
 		"conceptos": cfdi["cfdi:Conceptos"],
-		"impuestos": cfdi["cfdi:Impuestos"]
+		"impuestos": cfdi["cfdi:Impuestos"],
+		"sello": sello,
+		"certificado": certificado,
+		"noSAT": noSAT,
+		"FechaTimbrado": FechaTimbrado,
 	}
 
 

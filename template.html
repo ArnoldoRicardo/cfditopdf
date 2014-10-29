@@ -5,31 +5,30 @@
 			size: letter;
 			@frame content_frame {          /* Content Frame */
 				left: 50pt; width: 512pt; top: 120pt; height: 612pt;
-				/*border: 0pt solid white;*/
+				border: 0pt solid white;
 			}
 			@frame datos_comerciantes {           /* Another static Frame */
 				-pdf-frame-content: datos_comerciantes;
 				left: 50pt; width: 256pt; top: 50pt; height: 70pt;
-				/*border: 0pt solid white;*/
+				border: 0pt solid white;
 			}
 			@frame datos_generales {           /* Another static Frame */
 				-pdf-frame-content: datos_generales;
 				left: 306pt; width: 256pt; top: 50pt; height: 70pt;
-				/*border: 0pt solid white;*/
+				border: 0pt solid white;
 			}
 			@frame footer_frame {           /* Another static Frame */
 				-pdf-frame-content: footer_content;
 				left: 50pt; width: 512pt; top: 732pt; height: 35pt;
 				text-align: center;
-				/*border: 0pt solid white;*/
+				border: 0pt solid white;
 			}
 		}
     	p { margin: 0; -pdf-keep-with-next: true; }
     	p.separator { -pdf-keep-with-next: false; font-size: 6pt; }
 		table { 
 			-pdf-keep-with-next: true;
-			border-left: 1pt dotted black;
-			border-bottom: 1pt dotted black;
+			border: 0.2pt dotted black;
 			text-align: center; 
 		}
 		.s {
@@ -79,7 +78,23 @@
 	{{@importe}}
 	{{/conceptos}}
 	{{#impuestos}}
+		{{#cfdi:Traslados}}
+			{{#cfdi:Traslado}}
+					<p style="text-align: right;"><b>{{@impuesto}} {{@tasa}}%</b> {{@importe}}</p>
+			{{/cfdi:Traslado}}
+		{{/cfdi:Traslados}}
+		{{#cfdi:Retenciones}}
+			{{#cfdi:Retencion}}
+				<p style="text-align: right;"><b>{{@impuesto}} Retenido</b> {{@importe}}</p>
+			{{/cfdi:Retencion}}
+		{{/cfdi:Retenciones}}
 	{{/impuestos}}
 	<p style="text-align: right;"><b>total:</b> {{total}} <br></p>
+
+	<h3>Sello digital del CFDi</h3>
+	<p>{{sello}}</p>
+	<h3>Sello SAT</h3>
+	<p>{{certificado}}</p>
+	<p><b>numero de serie:</b>{{noSAT}}  --  <b>Fecha y hora de timbrado:</b>{{FechaTimbrado}}</p>
 </body>
 </html>
