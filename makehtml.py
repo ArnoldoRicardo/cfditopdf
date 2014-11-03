@@ -71,13 +71,15 @@ def extracdata(xml):
 from makepdf import convertHtmlToPdf
 
 def main(arg):
-	data = extracdata(arg)
-	import ipdb; ipdb.set_trace()
-	html = templating(open(BASE_DIR+"/template.html","r+").read(), data)
-	outputFilename = "test.pdf"
-	convertHtmlToPdf(html,outputFilename)
+	for i, xml in enumerate(arg):
+		data = extracdata(xml)
+		html = templating(open(BASE_DIR+"/template.html","r+").read(), data)
+		outputFilename = "factura "+str(i)+".pdf"
+		convertHtmlToPdf(html,outputFilename)
 
 if __name__ == '__main__':
 	import sys
-	arg = sys.argv[1]
-	main(arg)
+	if len(sys.argv[1:]) > 0:
+		main(sys.argv[1:])
+	else:
+		raw_input("no hay archivos xml")
