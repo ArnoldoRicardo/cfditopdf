@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- encoding: utf-8 -*-
 import os
 BASE_DIR = os.path.dirname(__file__)
 
@@ -73,8 +75,8 @@ from makepdf import convertHtmlToPdf
 def main(arg):
 	for i, xml in enumerate(arg):
 		data = extracdata(xml)
-		html = templating(open(BASE_DIR+"/template.html","r+").read(), data)
-		outputFilename = "factura "+str(i)+".pdf"
+		html = templating(open(BASE_DIR+"template.html","r+").read(), data)
+		outputFilename = data["folio"]+u".pdf"
 		convertHtmlToPdf(html,outputFilename)
 
 if __name__ == '__main__':
